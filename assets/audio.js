@@ -25,9 +25,9 @@ function addStock(n,              // @arg Integer - index
     };
 }
 
-var cache = new WMCache({}, function() {}, function(err) {
-                console.log(err.message);
-            });
+//var cache = new WMCache({}, function() {}, function(err) {
+//                console.log(err.message);
+//            });
 
 function getCachedAudio(n) {
     var target = stock[n];
