@@ -1,4 +1,4 @@
-WMCacheTest.js
-==============
+# WMCacheTest.js
 
-WMCache assets for test
+[WMCache.js](https://github.com/uupaa/WMCache.js) assets for test.
+

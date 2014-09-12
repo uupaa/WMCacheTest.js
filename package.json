@@ -1,0 +1,33 @@
+{
+  "name":           "uupaa.wmcachetest.js",
+  "version":        "0.0.0",
+  "description":    "WMCache.js assets for test.",
+  "url":            "https://github.com/uupaa/WMCacheTest.js",
+  "keywords":       ["WMCache", "WebModule", "uupaa", "Unstable"],
+  "repository": {
+    "type":         "git",
+    "url":          "https://github.com/uupaa/WMCacheTest.js.git"
+  },
+  "scripts": {
+    "init":         "npm update"
+  },
+  "x-build": {
+    "source":       [],
+    "output":       "",
+    "target":       ["all"],
+    "label":        [],
+    "module": {
+      "develop":    [],
+      "release":    []
+    }
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+  },
+  "lib":            "./lib/",
+  "main":           "./index.js",
+  "author":         "uupaa <uupaa.js@gmail.com>",
+  "license":        "MIT",
+  "contributors":   []
+}
