@@ -1,15 +1,20 @@
-var _AudioContext = window.AudioContext ||
-                    window.webkitAudioContext;
-var webAudioContext = _AudioContext ? new _AudioContext()
-                                    : null;
+(function(global) {
 
-var stock = {};
+var _runOnNode = "process" in global;
+var _runOnWorker = "WorkerLocation" in global;
+var _runOnBrowser = "document" in global;
 
+var _AudioContext = global.AudioContext ||
+                    global.webkitAudioContext;
+global.webAudioContext = _AudioContext ? new _AudioContext() : null;
+
+global.stock = {};
+global.addStock = addStock;
 function addStock(n,              // @arg Integer - index
                   nodeType,       // @arg String - "audio", "webaudio"
                   url,            // @arg URLString
                   responseType) { // @arg String - "arraybuffer", "blob"
-    stock[n] = {
+    global.stock[n] = {
         node:       null,           // <audio>
         nodeType:   nodeType,       // "audio", "webaudio"
         url:        url,
@@ -25,34 +30,32 @@ function addStock(n,              // @arg Integer - index
     };
 }
 
-//var cache = new WMCache({}, function() {}, function(err) {
-//                console.log(err.message);
-//            });
-
+global.getCachedAudio = getCachedAudio;
 function getCachedAudio(n) {
-    var target = stock[n];
+    var target = global.stock[n];
     var url = target.url;
 
     cache.get(url, function(url, data, mime, size) {
         target.data = data; // blob or arraybuffer
         target.mime = mime;
         target.size = size;
-        _downloaded(n);
+        global.downloaded(n);
     });
 }
 
+global.loadAudio = loadAudio;
 function loadAudio(n) {
-    var target = stock[n];
+    var target = global.stock[n];
 
     if (target.responseType) {
         _download(target.url, target.responseType, function(data, mime, size) {
             target.data = data; // blob or arraybuffer
             target.mime = mime;
             target.size = size;
-            _downloaded(n);
+            global.downloaded(n);
         });
     } else {
-        _downloaded(n);
+        global.downloaded(n);
     }
 }
 
@@ -68,14 +71,15 @@ function _download(url, responseType, callback) {
     xhr.send();
 }
 
-function _downloaded(n) {
-    var target = stock[n];
+global.downloaded = downloaded;
+function downloaded(n) {
+    var target = global.stock[n];
     var data = target.data;
 
     if (target.nodeType === "audio") {
         var bloburl = "";
         if (data instanceof ArrayBuffer) {
-            bloburl = URL.createObjectURL( new Blob([data], { type: target.mime /* "audio/mp4" */ }) );
+            bloburl = URL.createObjectURL( new Blob([data], { type: target.mime }) );
         } else if (data instanceof Blob) {
             bloburl = URL.createObjectURL(data);
         } else {
@@ -89,14 +93,14 @@ function _downloaded(n) {
         target.node.load();
     } else {
         if (data instanceof ArrayBuffer) {
-            webAudioContext.decodeAudioData(data, function(decodedBuffer) {
+            global.webAudioContext.decodeAudioData(data, function(decodedBuffer) {
                 target.sound.buffer = decodedBuffer;
                 _ready();
             });
         } else if (data instanceof Blob) {
             var reader = new FileReader();
             reader.onloadend = function() {
-                webAudioContext.decodeAudioData(reader.result, function(decodedBuffer) {
+                global.webAudioContext.decodeAudioData(reader.result, function(decodedBuffer) {
                     target.sound.buffer = decodedBuffer;
                     _ready();
                 });
@@ -123,16 +127,17 @@ function _downloaded(n) {
     }
 }
 
+global.playAudio = playAudio;
 function playAudio(n) {
-    var target = stock[n];
+    var target = global.stock[n];
 
     if (target.nodeType === "audio") {
         target.node.play();
     } else if (target.nodeType === "webaudio") {
         stopAudio(n);
-        target.sound.source = webAudioContext.createBufferSource();
+        target.sound.source = global.webAudioContext.createBufferSource();
         target.sound.source.buffer = target.sound.buffer;
-        target.sound.source.connect(webAudioContext.destination);
+        target.sound.source.connect(global.webAudioContext.destination);
         if (target.sound.source.start) {
             target.sound.source.start(0);
         } else {
@@ -141,8 +146,9 @@ function playAudio(n) {
     }
 }
 
+global.stopAudio = stopAudio;
 function stopAudio(n) {
-    var target = stock[n];
+    var target = global.stock[n];
 
     if (target.nodeType === "audio") {
         if (target.node) {
@@ -160,13 +166,17 @@ function stopAudio(n) {
     }
 }
 
-var read = 0, green = 0, blue = 80;
+var read = 0, green = 80, blue = 0;
 function _ready() {
-    blue += 32;
-    if (blue >= 256) {
-        blue = 80;
-        green += 32;
+    green += 32;
+    if (green >= 256) {
+        blue += 32;
+        green = 80;
     }
-    document.body.style.cssText = "background-color: rgb(0, " + green + ", " + blue + ")";
+    if (_runOnBrowser) {
+        document.body.style.cssText = "background-color: rgb(0, " + green + ", " + blue + ")";
+    }
 }
+
+})((this || 0).self || global);
 
