@@ -1,6 +1,6 @@
 {
   "name":           "uupaa.wmcachetest.js",
-  "version":        "0.0.4",
+  "version":        "0.0.5",
   "description":    "WMCache.js assets for test.",
   "url":            "https://github.com/uupaa/WMCacheTest.js",
   "keywords":       ["WMCache", "WebModule", "uupaa", "Unstable"],

@@ -95,14 +95,14 @@ function downloaded(n) {
         if (data instanceof ArrayBuffer) {
             global.webAudioContext.decodeAudioData(data, function(decodedBuffer) {
                 target.sound.buffer = decodedBuffer;
-                _ready();
+                global.changeBodyColor();
             });
         } else if (data instanceof Blob) {
             var reader = new FileReader();
             reader.onloadend = function() {
                 global.webAudioContext.decodeAudioData(reader.result, function(decodedBuffer) {
                     target.sound.buffer = decodedBuffer;
-                    _ready();
+                    global.changeBodyColor();
                 });
             };
             reader.readAsArrayBuffer(data);
@@ -122,7 +122,7 @@ function downloaded(n) {
         }
         if (duration > 0 && target.sound.canplay) {
             target.node.removeEventListener("progress", handleEvent, false);
-            _ready();
+            global.changeBodyColor();
         }
     }
 }
@@ -167,7 +167,8 @@ function stopAudio(n) {
 }
 
 var read = 0, green = 80, blue = 0;
-function _ready() {
+global.changeBodyColor = changeBodyColor;
+function changeBodyColor() {
     green += 32;
     if (green >= 256) {
         blue += 32;
