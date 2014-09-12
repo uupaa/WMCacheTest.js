@@ -160,12 +160,12 @@ function stopAudio(n) {
     }
 }
 
-var read = 0, green = 80, blue = 0;
+var read = 0, green = 0, blue = 80;
 function _ready() {
-    green += 32;
-    if (green >= 256) {
-        blue += 32;
-        green = 80;
+    blue += 32;
+    if (blue >= 256) {
+        blue = 80;
+        green += 32;
     }
     document.body.style.cssText = "background-color: rgb(0, " + green + ", " + blue + ")";
 }
