@@ -1,6 +1,6 @@
 {
   "name":           "uupaa.wmcachetest.js",
-  "version":        "0.0.6",
+  "version":        "0.0.7",
   "description":    "WMCache.js assets for test.",
   "url":            "https://github.com/uupaa/WMCacheTest.js",
   "keywords":       ["WMCache", "WebModule", "uupaa", "Unstable"],
@@ -12,7 +12,7 @@
     "init":         "npm update"
   },
   "x-build": {
-    "source":       ["assets/audio.js"],
+    "source":       [],
     "output":       "",
     "target":       ["all"],
     "label":        [],
@@ -25,9 +25,7 @@
   },
   "devDependencies": {
   },
-  "lib":            "./lib/",
-  "main":           "./index.js",
   "author":         "uupaa <uupaa.js@gmail.com>",
-  "license":        "MIT",
+  "license":        "",
   "contributors":   []
 }
